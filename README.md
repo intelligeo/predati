@@ -44,7 +44,7 @@ La presenza del lupo e di altri grandi predatori in Ticino è oggetto di crescen
 
 ## Licenza
 
-Vedi file LICENSE (da aggiungere).
+MIT (vedi file LICENSE).
 
 ---
 
