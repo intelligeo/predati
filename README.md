@@ -48,4 +48,4 @@ MIT (vedi file LICENSE).
 
 ---
 
-**Autore:** Dr. Sara Lanini-Maggi -
+**Autore:** [`https://www.linkedin.com/in/intelligeo`](Dr. Sara Lanini-Maggi)
