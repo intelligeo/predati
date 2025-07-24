@@ -2,7 +2,7 @@ name: Aggiorna dati predazioni
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Ogni giorno alle 6:00 UTC
+    - cron: '0 18 * * *'  # Ogni giorno alle 18:00
   workflow_dispatch:
 
 jobs:
