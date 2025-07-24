@@ -16,7 +16,7 @@ Questo repository contiene uno script Python per l'importazione, la pulizia e la
 - [`predati_source_last.csv`](predati_source_last.csv): dati validi e normalizzati pronti per l'analisi.
 - [`predati_source_errors.csv`](predati_source_errors.csv): dati scartati o da revisionare.
 - `web/`: directory per eventuali strumenti web di visualizzazione (non inclusi in questa versione).
-- `predati.qgz`: progetto QGIS per la visualizzazione e l'analisi spaziale dei dati.
+- `predati.qgz`: progetto QGIS per la visualizzazione e l'analisi spaziale dei dati (non incluso in questa versione).
 
 ## Contesto e utilità
 
