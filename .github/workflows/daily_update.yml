@@ -2,7 +2,7 @@ name: Aggiorna dati predazioni
 
 on:
   schedule:
-    - cron: '0 18 * * *'  # Ogni giorno alle 18:00
+    - cron: '0 16 * * *'  # Ogni giorno alle 18:00 CET/CEST (ora svizzera)
   workflow_dispatch:
 
 jobs:
@@ -10,6 +10,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
