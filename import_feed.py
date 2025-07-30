@@ -1,7 +1,7 @@
 # =============================================================================
 # Autore:      Dr. Sara Lanini-Maggi - www.intelligeo.ch
-# Versione:    1.0.0
-# Data:        2025-07-22
+# Versione:    1.0.1
+# Data:        2025-07-30
 # Abstract:    Script per l'importazione, la pulizia e la pubblicazione di dati
 #              sulle predazioni da lupo in Ticino. I dati vengono estratti da un
 #              feed RSS, normalizzati, esportati in CSV e pubblicati su PostGIS
@@ -15,6 +15,7 @@ import csv
 import re
 import psycopg2
 from psycopg2.extras import execute_values
+from pyproj import Transformer
 
 # Mappa per numeri in lettere
 NUMERI_LETTERE = {
@@ -27,6 +28,9 @@ NUMERI_LETTERE = {
 SPECIE = [
     "capra", "pecora", "agnello", "mucca", "cavallo", "lama", "cervo", "cerbiatto", "camoscio"
 ]
+
+# Trasformatore da LV95 (EPSG:2056) a WGS84 (EPSG:4326)
+transformer = Transformer.from_crs("EPSG:2056", "EPSG:4326", always_xy=True)
 
 def estrai_numero_predati(testo):
     # Cerca prima cifre
@@ -94,7 +98,8 @@ with open('predati_source_last.csv', 'w', newline='', encoding='utf-8') as csvfi
     # Intestazione per entrambi i file
     header = [
         "Data", "Luogo", "X", "Y",
-        "Numero_Predati", "Specie_Predate", "Osservazioni"
+        "Numero_Predati", "Specie_Predate", "Osservazioni",
+        "Long", "Lat"
     ]
     writer.writerow(header)
     error_writer.writerow(header)
@@ -127,6 +132,15 @@ with open('predati_source_last.csv', 'w', newline='', encoding='utf-8') as csvfi
                 x = ""
                 y = ""
 
+            # Conversione in WGS84
+            if x and y:
+                try:
+                    long, lat = transformer.transform(int(x), int(y))
+                except Exception:
+                    long, lat = "", ""
+            else:
+                long, lat = "", ""
+
             # Estrazione Numero_Predati e Specie_Predate
             numero_predati = estrai_numero_predati(predati)
             specie_predate = estrai_specie_predate(predati)
@@ -149,7 +163,8 @@ with open('predati_source_last.csv', 'w', newline='', encoding='utf-8') as csvfi
 
             row = [
                 data, localita, x, y,
-                numero_predati, specie_predate, osservazioni
+                numero_predati, specie_predate, osservazioni,
+                long, lat  # <-- aggiungi qui
             ]
 
             if errore:
@@ -158,7 +173,7 @@ with open('predati_source_last.csv', 'w', newline='', encoding='utf-8') as csvfi
                 writer.writerow(row)
         except Exception as e:
             print(f"Errore durante l'elaborazione del post: {e}")
-        
+
 # Dopo la scrittura dei CSV, pubblica i dati validi su PostGIS
 try:
     # Connessione al database
@@ -182,6 +197,8 @@ try:
             numero_predati INTEGER,
             specie_predate TEXT,
             osservazioni TEXT,
+            long DOUBLE PRECISION,
+            lat DOUBLE PRECISION,
             geom geometry(Point, 2056)
         );
     """)
@@ -197,6 +214,8 @@ try:
                 try:
                     x = int(row["X"])
                     y = int(row["Y"])
+                    long = float(row["Long"]) if row["Long"] else None
+                    lat = float(row["Lat"]) if row["Lat"] else None
                     # Geometria punto in EPSG:2056 (CH1903+)
                     geom = f"SRID=2056;POINT({x} {y})"
                     rows.append((
@@ -207,6 +226,8 @@ try:
                         int(row["Numero_Predati"]) if row["Numero_Predati"].isdigit() else None,
                         row["Specie_Predate"],
                         row["Osservazioni"],
+                        long,
+                        lat,
                         geom
                     ))
                 except Exception:
@@ -218,12 +239,12 @@ try:
                 cur,
                 """
                 INSERT INTO predazioni_lupo
-                (data, luogo, x, y, numero_predati, specie_predate, osservazioni, geom)
+                (data, luogo, x, y, numero_predati, specie_predate, osservazioni, long, lat, geom)
                 VALUES %s
                 ON CONFLICT DO NOTHING
                 """,
                 rows,
-                template="(%s, %s, %s, %s, %s, %s, %s, ST_GeomFromText(%s))"
+                template="(%s, %s, %s, %s, %s, %s, %s, %s, %s, ST_GeomFromText(%s))"
             )
             conn.commit()
 
@@ -231,3 +252,4 @@ try:
     conn.close()
 except Exception as e:
     print(f"Errore durante l'inserimento in PostGIS: {e}")
+    
