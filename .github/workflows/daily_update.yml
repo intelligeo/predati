@@ -30,4 +30,4 @@ jobs:
           POSTGIS_PASSWORD: ${{ secrets.POSTGIS_PASSWORD }}
           POSTGIS_HOST: ${{ secrets.POSTGIS_HOST }}
           POSTGIS_PORT: ${{ secrets.POSTGIS_PORT }}
-        run: import_feed.py
+        run: python import_feed.py
