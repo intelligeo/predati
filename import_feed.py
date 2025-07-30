@@ -164,7 +164,7 @@ with open('predati_source_last.csv', 'w', newline='', encoding='utf-8') as csvfi
             row = [
                 data, localita, x, y,
                 numero_predati, specie_predate, osservazioni,
-                long, lat  # <-- aggiungi qui
+                long, lat
             ]
 
             if errore:
