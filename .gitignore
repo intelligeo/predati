@@ -4,3 +4,8 @@ predati_source_last.qmd
 print_a4_landscape.qpt
 preda-ti.qgz
 predati_qc.qgz
+export/predati.fgb
+export/predati.fgb_ogr_tmp.fgb
+export/predati.qmd
+export/predati.sql
+predati_fgb.qgz
