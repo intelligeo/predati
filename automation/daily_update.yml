@@ -31,6 +31,3 @@ jobs:
           POSTGIS_HOST: ${{ secrets.POSTGIS_HOST }}
           POSTGIS_PORT: ${{ secrets.POSTGIS_PORT }}
         run: python import_feed.py
-
-      - name: Mostra file di log (opzionale)
-        run: cat predati_source_errors.log || echo "Nessun errore"
