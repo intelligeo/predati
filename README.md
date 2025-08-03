@@ -4,7 +4,7 @@ Questo repository contiene uno script Python per l’importazione, la pulizia e 
 
 ## Mappa
 
-La mappa con il geodato aggiornato è pubblicata al seguente indirizzo: [predati.mappa.ch](https://predati.mappa.ch')
+La mappa con il geodato aggiornato è pubblicata al seguente indirizzo: [predati.mappa.ch](https://predati.mappa.ch)
 
 ## Funzionalità principali
 
