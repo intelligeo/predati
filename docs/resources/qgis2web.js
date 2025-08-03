@@ -1005,9 +1005,7 @@ var attributionList = document.createElement('li');
 attributionList.innerHTML = `
 	Realizzazione: <a href="https://www.intelligeo.ch">intelligeo.ch</a> &middot;
     Fonte dati: <a href="https://www.swisstopo.admin.ch/it">swisstopo</a>, <a href="https://www4.ti.ch/dt/da/ucp/temi/grandi-predatori/tema/tema">Repubblica e Cantone Ticino</a> &middot;
-    <a href="https://github.com/qgis2web/qgis2web">qgis2web</a> &middot;
-	<a href="https://openlayers.org/">OpenLayers</a> &middot;
-	<a href="https://qgis.org/">QGIS</a>	
+    Tecnologie: <a href="https://github.com/qgis2web/qgis2web">qgis2web</a> - <a href="https://openlayers.org/">OpenLayers</a> - <a href="https://qgis.org/">QGIS</a>	
 `;
 var bottomAttributionUl = bottomAttribution.element.querySelector('ul');
 if (bottomAttributionUl) {
