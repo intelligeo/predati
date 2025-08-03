@@ -2,6 +2,10 @@
 
 Questo repository contiene uno script Python per l’importazione, la pulizia e la pubblicazione di dati sulle predazioni da lupo (e altri grandi predatori) nel Canton Ticino. I dati vengono estratti automaticamente dal feed RSS ufficiale del Cantone, normalizzati, esportati in CSV e pubblicati su una tabella PostGIS per analisi spaziali.
 
+## Mappa
+
+La mappa con il geodato aggiornato è pubblicata al seguente indirizzo: [predati.mappa.ch](https://predati.mappa.ch)
+
 ## Funzionalità principali
 
 - **Estrazione automatica** dal feed RSS cantonale sulle predazioni.
