@@ -127,8 +127,8 @@
             var sortedDates = Array.from(allDates).sort();
             var series = [];
             
-            // Create series for each species
-            speciesNames.forEach(function(species) {
+            // Create series for each species with cumulative values for racing effect
+            speciesNames.forEach(function(species, index) {
                 var data = [];
                 var cumulative = 0;
                 
@@ -138,20 +138,42 @@
                     data.push([date, cumulative]);
                 });
                 
-                series.push({
-                    name: species,
-                    type: 'line',
-                    data: data,
-                    smooth: true,
-                    emphasis: {
-                        focus: 'series'
-                    }
-                });
+                // Only add species that have data
+                if (cumulative > 0) {
+                    series.push({
+                        name: species,
+                        type: 'line',
+                        data: data,
+                        smooth: true,
+                        symbol: 'circle',
+                        symbolSize: 8,
+                        lineStyle: {
+                            width: 3
+                        },
+                        emphasis: {
+                            focus: 'series',
+                            lineStyle: {
+                                width: 5
+                            }
+                        },
+                        endLabel: {
+                            show: true,
+                            formatter: function(params) {
+                                return params.seriesName + ': ' + params.value[1];
+                            },
+                            fontSize: 10,
+                            color: '#001144'
+                        },
+                        animationDelay: function(idx) {
+                            return idx * 100;
+                        }
+                    });
+                }
             });
             
             var option = {
                 title: {
-                    text: 'Evoluzione predazioni per specie',
+                    text: 'Specie predate nel tempo (racing)',
                     left: 'center',
                     textStyle: {
                         color: '#001144',
@@ -162,11 +184,18 @@
                     trigger: 'axis',
                     axisPointer: {
                         type: 'cross'
+                    },
+                    formatter: function(params) {
+                        var result = params[0].axisValueLabel + '<br/>';
+                        params.forEach(function(item) {
+                            result += item.marker + ' ' + item.seriesName + ': ' + item.value[1] + '<br/>';
+                        });
+                        return result;
                     }
                 },
                 grid: {
                     left: '3%',
-                    right: '4%',
+                    right: '15%',
                     bottom: '8%',
                     top: '15%',
                     containLabel: true
@@ -177,20 +206,36 @@
                     axisLabel: {
                         color: '#001144',
                         fontSize: 10
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed',
+                            color: '#e0e0e0'
+                        }
                     }
                 },
                 yAxis: {
                     type: 'value',
-                    name: 'Numero cumulativo',
+                    name: 'Totale cumulativo',
                     axisLabel: {
                         color: '#001144',
                         fontSize: 10
                     },
                     nameTextStyle: {
                         color: '#001144'
+                    },
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            type: 'dashed',
+                            color: '#e0e0e0'
+                        }
                     }
                 },
-                series: series
+                series: series,
+                animationDuration: 2000,
+                animationEasing: 'cubicInOut'
             };
             
             myChart.setOption(option);
@@ -237,6 +282,7 @@
                 yAxis: {
                     type: 'value',
                     name: 'Numero animali',
+                    max: 200,
                     axisLabel: {
                         color: '#001144',
                         fontSize: 10
