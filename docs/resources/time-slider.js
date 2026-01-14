@@ -51,6 +51,8 @@
         
         // Get UI elements
         var sliderElement = document.getElementById('time-slider');
+        var sliderContainer = document.getElementById('time-slider-container');
+        var toggleButton = document.getElementById('toggle-slider');
         var startDateDisplay = document.getElementById('start-date');
         var endDateDisplay = document.getElementById('end-date');
         var dateInputStart = document.getElementById('date-input-start');
@@ -68,6 +70,16 @@
             console.error('noUiSlider library not found');
             return;
         }
+        
+        // Toggle slider visibility
+        if (toggleButton) {
+            toggleButton.addEventListener('click', function() {
+                sliderContainer.classList.toggle('collapsed');
+            });
+        }
+        
+        // Make slider draggable
+        makeDraggable(sliderContainer, document.querySelector('.slider-header'));
         
         // Check if noUiSlider is available
         if (typeof noUiSlider === 'undefined') {
@@ -230,4 +242,70 @@
         console.log('Date range: ' + formatDate(minDate) + ' to ' + formatDate(maxDate));
         console.log('Total features: ' + allFeatures.length);
     }
+    
+    // Generic draggable function for containers
+    function makeDraggable(container, header) {
+        var isDragging = false;
+        var currentX;
+        var currentY;
+        var initialX;
+        var initialY;
+        var xOffset = 0;
+        var yOffset = 0;
+        
+        header.addEventListener('mousedown', dragStart);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('mouseup', dragEnd);
+        
+        function dragStart(e) {
+            // Don't drag if clicking on buttons
+            if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                return;
+            }
+            
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+            isDragging = true;
+        }
+        
+        function drag(e) {
+            if (isDragging) {
+                e.preventDefault();
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+                xOffset = currentX;
+                yOffset = currentY;
+                
+                setTranslate(currentX, currentY, container);
+            }
+        }
+        
+        function dragEnd(e) {
+            initialX = currentX;
+            initialY = currentY;
+            isDragging = false;
+        }
+        
+        function setTranslate(xPos, yPos, el) {
+            // Get the current bottom/left/right/top values
+            var computedStyle = window.getComputedStyle(el);
+            var bottom = computedStyle.bottom;
+            var left = computedStyle.left;
+            var right = computedStyle.right;
+            var top = computedStyle.top;
+            
+            // Remove transform-based positioning and use absolute positioning
+            if (el.style.transform.includes('translateX')) {
+                el.style.left = '50%';
+                el.style.marginLeft = (-el.offsetWidth / 2) + 'px';
+                el.style.transform = 'none';
+            }
+            
+            // Apply drag offset
+            el.style.transform = 'translate(' + xPos + 'px, ' + yPos + 'px)';
+        }
+    }
+    
+    // Export for use in other modules
+    window.makeDraggable = makeDraggable;
 })();

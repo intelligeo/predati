@@ -56,14 +56,150 @@
             z-index: 1000;
             min-width: 400px;
             max-width: 600px;
+            transition: all 0.3s ease;
+        }
+        
+        #time-slider-container.collapsed {
+            min-width: auto;
+            padding: 10px 15px;
+        }
+        
+        #time-slider-container.collapsed .slider-content {
+            display: none;
+        }
+        
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: move;
+            user-select: none;
+        }
+        
+        #time-slider-container.collapsed .slider-header {
+            margin-bottom: 0;
         }
         
         #time-slider-container h4 {
-            margin: 0 0 10px 0;
+            margin: 0;
             font-family: Arial, sans-serif;
             font-size: 14px;
             color: #001144;
-            text-align: center;
+            flex: 1;
+        }
+        
+        #toggle-slider {
+            background: none;
+            border: none;
+            color: #001144;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 4px 8px;
+            line-height: 1;
+            transition: transform 0.3s ease;
+        }
+        
+        #toggle-slider:hover {
+            background-color: rgba(154, 194, 232, 0.3);
+            border-radius: 4px;
+        }
+        
+        #time-slider-container.collapsed #toggle-slider {
+            transform: rotate(180deg);
+        }
+        
+        #charts-container {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(212, 228, 247, 0.95);
+            padding: 15px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 17, 68, 0.3);
+            z-index: 1000;
+            width: 500px;
+            max-height: 600px;
+            transition: all 0.3s ease;
+        }
+        
+        #charts-container.collapsed {
+            width: auto;
+            padding: 10px 15px;
+        }
+        
+        #charts-container.collapsed .charts-content {
+            display: none;
+        }
+        
+        .charts-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            cursor: move;
+            user-select: none;
+        }
+        
+        #charts-container.collapsed .charts-header {
+            margin-bottom: 0;
+        }
+        
+        #charts-container h4 {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            color: #001144;
+            flex: 1;
+        }
+        
+        #toggle-charts {
+            background: none;
+            border: none;
+            color: #001144;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 4px 8px;
+            line-height: 1;
+            transition: transform 0.3s ease;
+        }
+        
+        #toggle-charts:hover {
+            background-color: rgba(154, 194, 232, 0.3);
+            border-radius: 4px;
+        }
+        
+        #charts-container.collapsed #toggle-charts {
+            transform: rotate(180deg);
+        }
+        
+        #chart-type-selector {
+            margin-bottom: 15px;
+        }
+        
+        #chart-type-selector select {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #9ac2e8;
+            border-radius: 4px;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #001144;
+            background-color: #f0f7fc;
+            cursor: pointer;
+        }
+        
+        #chart-type-selector select:focus {
+            outline: none;
+            border-color: #001144;
+            background-color: #ffffff;
+        }
+        
+        #chart-display {
+            width: 100%;
+            height: 400px;
+            background-color: #ffffff;
+            border-radius: 4px;
         }
         
         #time-slider {
@@ -168,26 +304,48 @@
                 <a href="#" id="popup-closer" class="ol-popup-closer"></a>
                 <div id="popup-content"></div>
             </div>
+            <div id="charts-container">
+                <div class="charts-header">
+                    <h4>Statistiche predazioni</h4>
+                    <button id="toggle-charts" title="Riduci/Espandi">▼</button>
+                </div>
+                <div class="charts-content">
+                    <div id="chart-type-selector">
+                        <select id="chart-type">
+                            <option value="species-timeline">Specie predate nel tempo</option>
+                            <option value="monthly-totals">Totali mensili</option>
+                            <option value="species-distribution">Distribuzione per specie</option>
+                            <option value="location-stats">Statistiche per località</option>
+                        </select>
+                    </div>
+                    <div id="chart-display"></div>
+                </div>
+            </div>
             <div id="time-slider-container">
-                <h4>Filtro temporale</h4>
-                <div id="time-slider"></div>
-                <div id="time-range-display">
-                    <span>Inizio: <strong id="start-date">--</strong></span>
-                    <span>Fine: <strong id="end-date">--</strong></span>
+                <div class="slider-header">
+                    <h4>Filtro temporale</h4>
+                    <button id="toggle-slider" title="Riduci/Espandi">▼</button>
                 </div>
-                <div class="date-selectors">
-                    <div class="date-selector-group">
-                        <label for="date-input-start">Data inizio:</label>
-                        <input type="date" id="date-input-start">
+                <div class="slider-content">
+                    <div id="time-slider"></div>
+                    <div id="time-range-display">
+                        <span>Inizio: <strong id="start-date">--</strong></span>
+                        <span>Fine: <strong id="end-date">--</strong></span>
                     </div>
-                    <div class="date-selector-group">
-                        <label for="date-input-end">Data fine:</label>
-                        <input type="date" id="date-input-end">
+                    <div class="date-selectors">
+                        <div class="date-selector-group">
+                            <label for="date-input-start">Data inizio:</label>
+                            <input type="date" id="date-input-start">
+                        </div>
+                        <div class="date-selector-group">
+                            <label for="date-input-end">Data fine:</label>
+                            <input type="date" id="date-input-end">
+                        </div>
                     </div>
-                </div>
-                <div class="time-controls">
-                    <button id="reset-time">Reset</button>
-                    <button id="show-all">Mostra tutto</button>
+                    <div class="time-controls">
+                        <button id="reset-time">Reset</button>
+                        <button id="show-all">Mostra tutto</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -204,6 +362,8 @@
         <script src="./resources/Autolinker.min.js"></script>
         <script src="./resources/qgis2web.js"></script>
         <script src="./resources/nouislider.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
         <script src="./resources/time-slider.js"></script>
+        <script src="./resources/charts.js"></script>
     </body>
 </html>
